@@ -65,6 +65,11 @@
 
 <body>
   <canvas class="webgl"></canvas>
+  <section class="section">
+    <a href="iphone.html" hx-get="iphone.html" hx-trigger="load" hx-swap="none">
+      <h1>IPhone </h1>
+    </a>
+  </section>
 
   <section class="section">
     <a href="airpods.html" hx-get="airpods.html" hx-trigger="load" hx-swap="none">
@@ -77,21 +82,16 @@
     </a>
   </section>
   <section class="section">
-    <a href="macbook.html" hx-get="macbook.html" hx-trigger="load" hx-swap="none">
-      <h2>Macbook</h2>
-    </a>
-  </section>
-  <section class="section">
     <a href="ipad.html" hx-get="ipad.html" hx-trigger="load" hx-swap="none">
       <h2>Ipad</h2>
     </a>
   </section>
+
   <section class="section">
     <a href="imac.html" hx-get="imac.html" hx-trigger="load" hx-swap="none">
-      <h2>Imac</h2>
+      <h2>IMac</h2>
     </a>
   </section>
-
   <script type="module">
     import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
     import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
@@ -111,9 +111,9 @@
   
     // Load GLTF Models
     const gltfFiles = [
+    "phone/scene.gltf",
       "airpods/scene.gltf",
       "apple_watch/scene.gltf",
-      "macbook/scene.gltf",
       "ipad/scene.gltf",
       "imac/scene.gltf"
     ];
@@ -130,6 +130,9 @@
           mesh.scale.set(0.15, 0.15, 0.15);  // Adjust the scale as needed
         } else if (file.includes("ipad")) {
           mesh.scale.set(0.01, 0.01, 0.01);  // Adjust the scale as needed
+        }
+        if (file.includes("phone")){
+          mesh.scale.set(7.1, 7.1, 7.1);
         }
   
         mesh.position.y = -objectsDistance * index;

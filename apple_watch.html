@@ -103,9 +103,6 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://unpkg.com/htmx.org@1.8.6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 </head>
 
 <body>
@@ -119,7 +116,7 @@
       <button class="btn">Buy Now</button>
       <button class="btn">Learn More</button>
     </div>
-    <a href="c&cnew1.html" class="back-link">Back to Home</a>
+    <a href="index.html" class="back-link">Back to Home</a>
   </div>
 
   <script type="module">
@@ -249,41 +246,6 @@
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // MediaPipe FaceMesh
-    const faceMesh = new FaceMesh({
-      locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-      }
-    });
-
-    faceMesh.setOptions({
-      maxNumFaces: 1,
-      refineLandmarks: true,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    });
-
-    faceMesh.onResults(onResults);
-
-    const videoElement = document.createElement("video");
-    videoElement.style.display = "none";
-    document.body.appendChild(videoElement);
-
-    const cameraUtils = new Camera(videoElement, {
-      onFrame: async () => {
-        await faceMesh.send({ image: videoElement });
-      },
-      width: 1280,
-      height: 720
-    });
-    cameraUtils.start();
-
-    function onResults(results) {
-      if (results.multiFaceLandmarks) {
-        // Do something with the face landmarks here
-      }
-    }
   </script>
 </body>
 </html>

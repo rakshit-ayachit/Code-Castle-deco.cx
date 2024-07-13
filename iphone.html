@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Watch - Three.js Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "neue-haas-grotesk-display", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      color: #ffeded;
+      background: #1e1a20;
+      display: flex;
+      justify-content: space-between;
+      height: 100vh;
+    }
+
+    .webgl {
+      width: 60%;
+      height: 100%;
+      outline: none;
+    }
+
+    .content {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .content h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px; /* Adjust spacing between paragraph and buttons */
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      border-radius: 20px;
+      background-color: #ffeded;
+      color: #1e1a20;
+      border: none;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #1e1a20;
+      color: #ffeded;
+      transform: scale(1.05);
+    }
+
+    .back-link {
+      color: #ffeded;
+      text-decoration: none;
+      font-size: 1.2em;
+      border: 2px solid #ffeded;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .back-link:hover {
+      background: #ffeded;
+      color: #1e1a20;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+        "GLTFLoader": "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js",
+        "OrbitControls": "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js"
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.8.6"></script>
+</head>
+
+<body>
+  <canvas class="webgl"></canvas>
+
+  <div class="content">
+    <h1>IPhone 14 Pro Max</h1>
+    <p>Experience innovation at your fingertips with the iPhone.</p>
+  <div class="button-container">
+      <button class="btn">Add to Cart</button>
+      <button class="btn">Buy Now</button>
+      <button class="btn">Learn More</button>
+    </div>
+    <a href="index.html" class="back-link">Back to Home</a>
+  </div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { GLTFLoader } from "GLTFLoader";
+    import { OrbitControls } from "OrbitControls";
+
+    const parameters = {
+      particleColor: "#ffeded"
+    };
+
+    // Canvas
+    const canvas = document.querySelector("canvas.webgl");
+
+    // Scene
+    const scene = new THREE.Scene();
+
+    // GLTF Loader
+    const loader = new GLTFLoader();
+
+    // Loading Manager
+    const loadingManager = new THREE.LoadingManager();
+    loadingManager.onStart = () => {
+      document.getElementById('loading').style.display = 'block';
+    };
+    loadingManager.onLoad = () => {
+      document.getElementById('loading').style.display = 'none';
+    };
+
+    let mesh;
+    let controls;
+
+    // Load GLTF Model
+    loader.load("phone/scene.gltf", (gltf) => {
+      mesh = gltf.scene;
+      mesh.scale.set(10.30, 10.30, 10.30);  // Adjust the scale as needed
+      mesh.position.set(0, 0, 0);
+      scene.add(mesh);
+
+      // Interactive Controls
+      controls = new OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.screenSpacePanning = false;
+      controls.maxPolarAngle = Math.PI / 2;
+
+      // Animation Loop
+      const clock = new THREE.Clock();
+
+      const tick = () => {
+        const elapsedTime = clock.getElapsedTime();
+
+        // Update controls
+        controls.update(); // Ensure controls are updated
+
+        // Render
+        renderer.render(scene, camera);
+
+        // Call tick again on the next frame
+        window.requestAnimationFrame(tick);
+      };
+
+      tick(); // Start animation loop after controls are initialized
+    });
+
+    // Lights
+    const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
+    directionalLight.position.set(1, 1, 0);
+    scene.add(directionalLight);
+
+    // Particles
+    const particlesCount = 200;
+    const positions = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount; i++) {
+      positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: parameters.particleColor,
+      sizeAttenuation: true,
+      size: 0.03
+    });
+
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+    // Sizes
+    const sizes = {
+      width: window.innerWidth * 0.6,
+      height: window.innerHeight
+    };
+
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth * 0.6;
+      sizes.height = window.innerHeight;
+
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(
+      35,
+      sizes.width / sizes.height,
+      0.1,
+      100
+    );
+    camera.position.z = 6;
+    scene.add(camera);
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true
+    });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>iPad - Three.js Portfolio</title>
+  <title>Apple Watch - Three.js Portfolio</title>
   <style>
     * {
       margin: 0;
@@ -101,26 +101,32 @@
       }
     }
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
 
 <body>
   <canvas class="webgl"></canvas>
 
   <div class="content">
-    <h1>iPad</h1>
-    <p>Explore the versatility and innovation of the iPad Pro.</p>
+    <h1>IPad Mini</h1>
+    <p>Embrace the endless possibilities of productivity and entertainment with the iPad.</p>
     <div class="button-container">
       <button class="btn">Add to Cart</button>
       <button class="btn">Buy Now</button>
       <button class="btn">Learn More</button>
     </div>
-    <a href="apple.html" class="back-link">Back to Apple Products</a>
+    <a href="index.html" class="back-link">Back to Home</a>
   </div>
 
   <script type="module">
     import * as THREE from "three";
     import { GLTFLoader } from "GLTFLoader";
     import { OrbitControls } from "OrbitControls";
+
+    const parameters = {
+      particleColor: "#ffeded"
+    };
 
     // Canvas
     const canvas = document.querySelector("canvas.webgl");
@@ -146,7 +152,7 @@
     // Load GLTF Model
     loader.load("ipad/scene.gltf", (gltf) => {
       mesh = gltf.scene;
-      mesh.scale.set(0.04, 0.04, 0.04);  // Adjust the scale as needed
+      mesh.scale.set(0.02, 0.02, 0.02);  // Adjust the scale as needed
       mesh.position.set(0, 0, 0);
       scene.add(mesh);
 
@@ -180,6 +186,31 @@
     const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
     directionalLight.position.set(1, 1, 0);
     scene.add(directionalLight);
+
+    // Particles
+    const particlesCount = 200;
+    const positions = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount; i++) {
+      positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: parameters.particleColor,
+      sizeAttenuation: true,
+      size: 0.03
+    });
+
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
 
     // Sizes
     const sizes = {
