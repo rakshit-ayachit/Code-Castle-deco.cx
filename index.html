@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Portfolio</title>
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        }
+
+        body {
+        font-family: "neue-haas-grotesk-display", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        color: #ffeded;
+        }
+        html {
+        background: #1e1a20;
+        }
+
+        .webgl {
+        position: fixed;
+        top: 0;
+        left: 0;
+        outline: none;
+        }
+
+        .section {
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+        color: #ffeded;
+        font-size: 10vmin;
+        letter-spacing: 0.3vmin;
+        padding-left: 10%;
+        padding-right: 10%;
+        -webkit-text-stroke: 1.2px #ffeded;
+        -webkit-text-fill-color: rgba(0, 0, 90, 0.2);
+        }
+
+        section:nth-child(odd) {
+        justify-content: flex-end;
+        }
+
+        .section a {
+        color: #ffeded;
+        text-decoration: none;
+        }
+
+    </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+        "GLTFLoader": "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js"
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.8.6"></script>
+</head>
+
+<body>
+  <canvas class="webgl"></canvas>
+
+  <section class="section">
+    <a href="airpods.html" hx-get="airpods.html" hx-trigger="load" hx-swap="none">
+      <h1>Air Pods</h1>
+    </a>
+  </section>
+  <section class="section">
+    <a href="apple_watch.html" hx-get="apple_watch.html" hx-trigger="load" hx-swap="none">
+      <h2>Apple Watch</h2>
+    </a>
+  </section>
+  <section class="section">
+    <a href="macbook.html" hx-get="macbook.html" hx-trigger="load" hx-swap="none">
+      <h2>Macbook</h2>
+    </a>
+  </section>
+  <section class="section">
+    <a href="ipad.html" hx-get="ipad.html" hx-trigger="load" hx-swap="none">
+      <h2>Ipad</h2>
+    </a>
+  </section>
+  <section class="section">
+    <a href="imac.html" hx-get="imac.html" hx-trigger="load" hx-swap="none">
+      <h2>Imac</h2>
+    </a>
+  </section>
+
+  <script type="module">
+    import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+    import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
+  
+    const parameters = {
+      particleColor: "#ffeded"
+    };
+  
+    // Canvas
+    const canvas = document.querySelector("canvas.webgl");
+  
+    // Scene
+    const scene = new THREE.Scene();
+  
+    // GLTF Loader
+    const loader = new GLTFLoader();
+  
+    // Load GLTF Models
+    const gltfFiles = [
+      "airpods/scene.gltf",
+      "apple_watch/scene.gltf",
+      "macbook/scene.gltf",
+      "ipad/scene.gltf",
+      "imac/scene.gltf"
+    ];
+  
+    const objectsDistance = 4;
+    const sectionMeshes = [];
+  
+    gltfFiles.forEach((file, index) => {
+      loader.load(file, (gltf) => {
+        const mesh = gltf.scene;
+  
+        // Scale down specific models
+        if (file.includes("airpods")) {
+          mesh.scale.set(0.15, 0.15, 0.15);  // Adjust the scale as needed
+        } else if (file.includes("ipad")) {
+          mesh.scale.set(0.01, 0.01, 0.01);  // Adjust the scale as needed
+        }
+  
+        mesh.position.y = -objectsDistance * index;
+        mesh.position.x = index % 2 === 0 ? 2 : -2;
+        scene.add(mesh);
+        sectionMeshes.push(mesh);
+  
+        // Event listener for hover
+        mesh.userData.hovered = false;
+        mesh.userData.defaultRotation = { x: mesh.rotation.x, y: mesh.rotation.y, z: mesh.rotation.z };
+  
+        mesh.addEventListener("mouseenter", () => {
+          mesh.userData.hovered = true;
+        });
+  
+        mesh.addEventListener("mouseleave", () => {
+          mesh.userData.hovered = false;
+        });
+      });
+    });
+  
+    // Lights
+    const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
+    directionalLight.position.set(1, 1, 0);
+    scene.add(directionalLight);
+  
+    // Particles
+    const particlesCount = 200;
+    const positions = new Float32Array(particlesCount * 3);
+  
+    for (let i = 0; i < particlesCount; i++) {
+      positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 1] =
+        objectsDistance * 0.5 -
+        Math.random() * objectsDistance * gltfFiles.length;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    }
+  
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+  
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: parameters.particleColor,
+      sizeAttenuation: true,
+      size: 0.03
+    });
+  
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+  
+    // Sizes
+    const sizes = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    };
+  
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+  
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+  
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+  
+    // Camera
+    const cameraGroup = new THREE.Group();
+    scene.add(cameraGroup);
+  
+    const camera = new THREE.PerspectiveCamera(
+      35,
+      sizes.width / sizes.height,
+      0.1,
+      100
+    );
+    camera.position.z = 6;
+    cameraGroup.add(camera);
+  
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true
+    });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  
+    // Scroll
+    let scrollY = window.scrollY;
+    let currentSection = 0;
+  
+    window.addEventListener("scroll", () => {
+      scrollY = window.scrollY;
+      const newSection = Math.round(scrollY / sizes.height);
+  
+      if (newSection != currentSection) {
+        currentSection = newSection;
+  
+        gsap.to(sectionMeshes[currentSection].rotation, {
+          duration: 1.5,
+          ease: "power2.inOut",
+          x: "+=6",
+          y: "+=3",
+          z: "+=1.5"
+        });
+      }
+    });
+  
+    // Cursor
+    const cursor = {};
+    cursor.x = 0;
+    cursor.y = 0;
+  
+    window.addEventListener("mousemove", (event) => {
+      cursor.x = event.clientX / sizes.width - 0.5;
+      cursor.y = event.clientY / sizes.height - 0.5;
+    });
+  
+    // Animate
+    const clock = new THREE.Clock();
+    let previousTime = 0;
+  
+    const tick = () => {
+      const elapsedTime = clock.getElapsedTime();
+      const deltaTime = elapsedTime - previousTime;
+      previousTime = elapsedTime;
+  
+      camera.position.y = (-scrollY / sizes.height) * objectsDistance;
+  
+      const parallaxX = cursor.x * 0.5;
+      const parallaxY = -cursor.y * 0.5;
+      cameraGroup.position.x +=
+        (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+      cameraGroup.position.y +=
+        (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
+  
+      sectionMeshes.forEach(mesh => {
+        // Rotate mesh on hover
+        if (mesh.userData.hovered) {
+          mesh.rotation.x += deltaTime * 0.3; // Adjust rotation speed as needed
+        } else {
+          // Reset rotation if not hovered
+          mesh.rotation.x += (mesh.userData.defaultRotation.x - mesh.rotation.x) * 0.05;
+        }
+        mesh.rotation.y += deltaTime * 0.12;
+      });
+  
+      renderer.render(scene, camera);
+  
+      window.requestAnimationFrame(tick);
+    };
+  
+    tick();
+  </script>
+</body>
+</html>
