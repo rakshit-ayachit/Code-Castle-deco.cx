@@ -4,55 +4,101 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Three.js Portfolio</title>
-    <style>
-        * {
-        margin: 0;
-        padding: 0;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-        font-family: "neue-haas-grotesk-display", sans-serif;
-        font-weight: 700;
-        font-style: normal;
-        color: #ffeded;
-        }
-        html {
-        background: #1e1a20;
-        }
+    body {
+      font-family: "neue-haas-grotesk-display", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      color: #ffeded;
+      background: linear-gradient(to bottom, #000000 0%, #000000 30%, #87ceeb 100%);
+      transition: background 0.3s ease;
+      padding-top: 150px; /* Adjust this value to shift the content down */
 
-        .webgl {
-        position: fixed;
-        top: 0;
-        left: 0;
-        outline: none;
-        }
+    }
+    
+    
+    html {
+      height: 100%;
+      background: linear-gradient(to bottom, #000000 0%, #000000 30%, #87ceeb 100%);
+    }
 
-        .section {
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        position: relative;
-        color: #ffeded;
-        font-size: 10vmin;
-        letter-spacing: 0.3vmin;
-        padding-left: 10%;
-        padding-right: 10%;
-        -webkit-text-stroke: 1.2px #ffeded;
-        -webkit-text-fill-color: rgba(0, 0, 90, 0.2);
-        }
+    .webgl {
+      position: fixed;
+      top: 0;
+      left: 0;
+      outline: none;
+    }
 
-        section:nth-child(odd) {
-        justify-content: flex-end;
-        }
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ffeded;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+    }
 
-        .section a {
-        color: #ffeded;
-        text-decoration: none;
-        }
+    .navbar a {
+      color: #ffeded;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .section {
+      display: flex;
+      align-items: left;
+      height: 100vh;
+      position: relative;
+      color: #ffeded;
+      font-size: 10vmin;
+      letter-spacing: 0.3vmin;
+      padding-left: 10%;
+      padding-right: 10%;
+      -webkit-text-stroke: 1.2px #ffeded;
+      -webkit-text-fill-color: rgba(0, 0, 90, 0.2);
+    }
+
+    .left-align {
+      justify-content: flex-start;
+    }
+
+    section:nth-child(odd) {
+      justify-content: flex-end;
+    }
+
+    .section a {
+      color: #ffeded;
+      text-decoration: none;
+    }
+    .spacer {
+  height: 100px; /* Adjust the height as needed */
+  width: 100%;   /* Ensure it takes full width */
+}
+/* Style the content container */
+.content {
+    display: flex;
+    justify-content: center; /* Center aligns content horizontally */
+    align-items: center; /* Center aligns content vertically */
+    height: 100vh; /* Adjust as needed */
+    padding: 20px; /* Adds space around the content */
+}
+
+/* Style the models container */
+.models {
+    flex: 1; /* Takes up remaining space */
+    margin-right: 20px; /* Adds space between models and text */
+}
 
 
-        
-    </style>
+  </style>
   <script type="importmap">
     {
       "imports": {
@@ -66,14 +112,15 @@
 </head>
 
 <body>
-  <canvas class="webgl"></canvas>
-  <section class="section">
-    <a href="iphone.html" hx-get="iphone.html" hx-trigger="load" hx-swap="none">
-      <h1>IPhone </h1>
-    </a>
-  </section>
+  <div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+  </div>
 
-  <section class="section">
+  <canvas class="webgl"></canvas>
+  <div class="spacer"></div>
+
+  <section class="section left-align">
     <a href="airpods.html" hx-get="airpods.html" hx-trigger="load" hx-swap="none">
       <h1>Air Pods</h1>
     </a>
@@ -84,144 +131,231 @@
     </a>
   </section>
   <section class="section">
+    <a href="iphone.html" hx-get="iphone.html" hx-trigger="load" hx-swap="none">
+      <h2>IPhone</h2>
+    </a>
+  </section>
+  <section class="section">
     <a href="ipad.html" hx-get="ipad.html" hx-trigger="load" hx-swap="none">
       <h2>Ipad</h2>
     </a>
   </section>
-
   <section class="section">
     <a href="imac.html" hx-get="imac.html" hx-trigger="load" hx-swap="none">
-      <h2>IMac</h2>
+      <h2>Imac</h2>
     </a>
   </section>
-  <footer>
-    <p>&copy; 2024 Your Name. All rights reserved.</p>
-  </footer>
 
   <script type="module">
     import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
     import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
-  
-    const parameters = {
-      particleColor: "#ffeded"
-    };
-  
+
     // Canvas
     const canvas = document.querySelector("canvas.webgl");
-  
+
     // Scene
     const scene = new THREE.Scene();
-  
+
     // GLTF Loader
     const loader = new GLTFLoader();
-  
+
     // Load GLTF Models
     const gltfFiles = [
-    "phone/scene.gltf",
-      "airpods/scene.gltf",
-      "apple_watch/scene.gltf",
-      "ipad/scene.gltf",
-      "imac/scene.gltf"
+      { url: "airpods/scene.gltf", link: "airpods.html" },
+      { url: "apple_watch/scene.gltf", link: "apple_watch.html" },
+      { url: "phone/scene.gltf", link: "macbook.html" },
+      { url: "ipad/scene.gltf", link: "ipad.html" },
+      { url: "imac/scene.gltf", link: "imac.html" }
     ];
-  
+
     const objectsDistance = 4;
     const sectionMeshes = [];
-  
+
+    // Load models
     gltfFiles.forEach((file, index) => {
-      loader.load(file, (gltf) => {
+      loader.load(file.url, (gltf) => {
         const mesh = gltf.scene;
-  
+
+        // Create a group for the model
+        const group = new THREE.Group();
+        group.add(mesh);
+
+        // Center the group
+        const box = new THREE.Box3().setFromObject(mesh);
+        const center = box.getCenter(new THREE.Vector3());
+        mesh.position.sub(center);
+
         // Scale down specific models
-        if (file.includes("airpods")) {
-          mesh.scale.set(0.15, 0.15, 0.15);  // Adjust the scale as needed
-        } else if (file.includes("ipad")) {
-          mesh.scale.set(0.01, 0.01, 0.01);  // Adjust the scale as needed
+        if (file.url.includes("airpods")) {
+          group.scale.set(0.5, 0.5, 0.5);  // Adjust the scale as needed
+        } else if (file.url.includes("ipad")) {
+          group.scale.set(0.05, 0.05, 0.05);  // Adjust the scale as needed
         }
-        if (file.includes("phone")){
-          mesh.scale.set(7.1, 7.1, 7.1);
+        if (file.url.includes("phone")){
+          mesh.scale.set(19.9, 19.9, 19.9); // Adjust the scale as needed
         }
-  
-        mesh.position.y = -objectsDistance * index;
-        mesh.position.x = index % 2 === 0 ? 2 : -2;
-        scene.add(mesh);
-        sectionMeshes.push(mesh);
-  
-        // Event listener for hover
-        mesh.userData.hovered = false;
-        mesh.userData.defaultRotation = { x: mesh.rotation.x, y: mesh.rotation.y, z: mesh.rotation.z };
-  
-        mesh.addEventListener("mouseenter", () => {
-          mesh.userData.hovered = true;
+
+        if (file.url.includes("imac")){
+          mesh.scale.set(1.9, 1.9, 1.9); // Adjust the scale as needed
+        }
+        if (file.url.includes("apple_watch")){
+          mesh.scale.set(1.9, 1.9, 1.9); // Adjust the scale as needed
+        }
+
+
+        group.position.y = -objectsDistance * index;
+        group.position.x = index % 2 === 0 ? 2 : -2;
+        scene.add(group);
+        sectionMeshes.push(group);
+
+        // Add event listener for click
+        group.userData.link = file.link;
+        group.userData.hovered = false;
+        group.userData.defaultRotation = { x: group.rotation.x, y: group.rotation.y, z: group.rotation.z };
+
+        // Event listener for mouse click
+        window.addEventListener("click", (event) => {
+          const mouse = new THREE.Vector2(
+            (event.clientX / window.innerWidth) * 2 - 1,
+            -(event.clientY / window.innerHeight) * 2 + 1
+          );
+          const raycaster = new THREE.Raycaster();
+          raycaster.setFromCamera(mouse, camera);
+
+          const intersects = raycaster.intersectObject(group, true);
+          if (intersects.length > 0) {
+            window.location.href = group.userData.link;
+          }
         });
-  
-        mesh.addEventListener("mouseleave", () => {
-          mesh.userData.hovered = false;
+
+        // Event listener for mouse move
+        window.addEventListener("mousemove", (event) => {
+          const mouse = new THREE.Vector2(
+            (event.clientX / window.innerWidth) * 2 - 1,
+            -(event.clientY / window.innerHeight) * 2 + 1
+          );
+          const raycaster = new THREE.Raycaster();
+          raycaster.setFromCamera(mouse, camera);
+
+          const intersects = raycaster.intersectObject(group, true);
+          if (intersects.length > 0) {
+            if (!group.userData.hovered) {
+              group.userData.hovered = true;
+              createOrbit(group);
+            }
+          } else {
+            if (group.userData.hovered) {
+              group.userData.hovered = false;
+              scatterParticles();
+            }
+          }
         });
       });
     });
-  
+
     // Lights
     const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
     directionalLight.position.set(1, 1, 0);
     scene.add(directionalLight);
-  
-    // Particles
-    const particlesCount = 200;
-    const positions = new Float32Array(particlesCount * 3);
-  
-    for (let i = 0; i < particlesCount; i++) {
-      positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
-      positions[i * 3 + 1] =
-        objectsDistance * 0.5 -
-        Math.random() * objectsDistance * gltfFiles.length;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+    // Ring Particles
+    const ringParticlesCount = 4000; // Increased number of particles to 4000 for thicker ring
+    const ringParticlesPositions = new Float32Array(ringParticlesCount * 3);
+    const ringParticlesOriginalPositions = new Float32Array(ringParticlesCount * 3); // Store initial positions
+    const ringParticlesTargetPositions = new Float32Array(ringParticlesCount * 3); // Store target positions for ring particles
+    const ringParticlesIndices = new Set();
+    const ringParticlesRandomValues = new Float32Array(ringParticlesCount); // Store random values for each particle
+
+    for (let i = 0; i < ringParticlesCount; i++) {
+      ringParticlesPositions[i * 3 + 0] = (Math.random() - 0.5) * 20;
+      ringParticlesPositions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+      ringParticlesPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+
+      ringParticlesOriginalPositions[i * 3 + 0] = ringParticlesPositions[i * 3 + 0];
+      ringParticlesOriginalPositions[i * 3 + 1] = ringParticlesPositions[i * 3 + 1];
+      ringParticlesOriginalPositions[i * 3 + 2] = ringParticlesPositions[i * 3 + 2];
+
+      ringParticlesRandomValues[i] = Math.random(); // Generate a random value for each particle
+
+      ringParticlesIndices.add(i);
     }
-  
-    const particlesGeometry = new THREE.BufferGeometry();
-    particlesGeometry.setAttribute(
+
+    const ringParticlesGeometry = new THREE.BufferGeometry();
+    ringParticlesGeometry.setAttribute(
       "position",
-      new THREE.BufferAttribute(positions, 3)
+      new THREE.BufferAttribute(ringParticlesPositions, 3)
     );
-  
-    const particlesMaterial = new THREE.PointsMaterial({
-      color: parameters.particleColor,
-      sizeAttenuation: true,
-      size: 0.03
+    ringParticlesGeometry.setAttribute(
+      "aRandom",
+      new THREE.BufferAttribute(ringParticlesRandomValues, 1)
+    );
+
+    // Shader Material for Ring Particles
+    const ringVertexShader = `
+      uniform float uTime;
+      attribute float aRandom;
+      varying float vRandom;
+      void main() {
+        vRandom = aRandom;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = 50.0 * (1.0 / -mvPosition.z); // Adjusted the point size to 50
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+
+    const ringFragmentShader = `
+      uniform float uTime;
+      varying float vRandom;
+      void main() {
+        float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
+        float strength = 0.3 / distanceToCenter * (1.0 - 0.3 * abs(sin(uTime + vRandom * 10.0))); // Dimming the glow effect
+        gl_FragColor = vec4(vec3(1.0, 0.8, 0.0) * strength, strength); // Adjusted color for a dimmer effect
+      }
+    `;
+
+    const ringMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0.0 }
+      },
+      vertexShader: ringVertexShader,
+      fragmentShader: ringFragmentShader,
+      transparent: true,
+      blending: THREE.AdditiveBlending
     });
-  
-    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particles);
-  
+
+    const ringParticles = new THREE.Points(ringParticlesGeometry, ringMaterial);
+    scene.add(ringParticles);
+
     // Sizes
     const sizes = {
       width: window.innerWidth,
       height: window.innerHeight
     };
-  
+
     window.addEventListener("resize", () => {
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
-  
+
       camera.aspect = sizes.width / sizes.height;
       camera.updateProjectionMatrix();
-  
+
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
-  
+
     // Camera
     const cameraGroup = new THREE.Group();
     scene.add(cameraGroup);
-  
+
     const camera = new THREE.PerspectiveCamera(
       35,
       sizes.width / sizes.height,
       0.1,
       100
     );
-    camera.position.z = 6;
+    camera.position.z = 10;
     cameraGroup.add(camera);
-  
+
     // Renderer
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -229,18 +363,21 @@
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  
+
+    // Scatter particles initially
+    scatterParticles();
+
     // Scroll
     let scrollY = window.scrollY;
     let currentSection = 0;
-  
+
     window.addEventListener("scroll", () => {
       scrollY = window.scrollY;
       const newSection = Math.round(scrollY / sizes.height);
-  
+
       if (newSection != currentSection) {
         currentSection = newSection;
-  
+
         gsap.to(sectionMeshes[currentSection].rotation, {
           duration: 1.5,
           ease: "power2.inOut",
@@ -249,52 +386,114 @@
           z: "+=1.5"
         });
       }
+
+      // Change background color dynamically based on scroll position
+      const scrollFraction = scrollY / (sizes.height * (sectionMeshes.length - 1));
+      const nightColor = { r: 0, g: 0, b: 0 }; // Black color in RGB
+      const skyColor = { r: 135, g: 206, b: 235 }; // Sky color in RGB
+      const newColor = {
+        r: nightColor.r + scrollFraction * (skyColor.r - nightColor.r),
+        g: nightColor.g + scrollFraction * (skyColor.g - nightColor.g),
+        b: nightColor.b + scrollFraction * (skyColor.b - nightColor.b),
+      };
+      document.body.style.background = `rgb(${newColor.r}, ${newColor.g}, ${newColor.b})`;
     });
-  
+
     // Cursor
     const cursor = {};
     cursor.x = 0;
     cursor.y = 0;
-  
+
     window.addEventListener("mousemove", (event) => {
       cursor.x = event.clientX / sizes.width - 0.5;
       cursor.y = event.clientY / sizes.height - 0.5;
     });
-  
+
+    // Create particles orbit around the model
+    let ringAngle = 0;
+    function createOrbit(group) {
+      const targetPosition = new THREE.Vector3();
+      group.getWorldPosition(targetPosition);
+
+      ringParticlesIndices.forEach(i => {
+        const radius = 1.5; // Smaller radius for circular motion
+        const thickness = 1.5; // Increase thickness to spread particles
+        const angle = (i / ringParticlesCount) * Math.PI * 2 + ringAngle;
+        const offset = (Math.random() - 0.5) * thickness;
+
+        ringParticlesTargetPositions[i * 3 + 0] = targetPosition.x + (radius + offset) * Math.cos(angle);
+        ringParticlesTargetPositions[i * 3 + 1] = targetPosition.y + (radius + offset) * Math.sin(angle);
+        ringParticlesTargetPositions[i * 3 + 2] = targetPosition.z; // Maintain z position
+      });
+    }
+
+    // Scatter ring particles
+    function scatterParticles() {
+      ringParticlesIndices.forEach(i => {
+        ringParticlesTargetPositions[i * 3 + 0] = (Math.random() - 0.5) * 20;
+        ringParticlesTargetPositions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+        ringParticlesTargetPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+      });
+    }
+
     // Animate
     const clock = new THREE.Clock();
     let previousTime = 0;
-  
+
     const tick = () => {
       const elapsedTime = clock.getElapsedTime();
       const deltaTime = elapsedTime - previousTime;
       previousTime = elapsedTime;
-  
+
+      ringMaterial.uniforms.uTime.value = elapsedTime * 5.0;
+
       camera.position.y = (-scrollY / sizes.height) * objectsDistance;
-  
+
       const parallaxX = cursor.x * 0.5;
       const parallaxY = -cursor.y * 0.5;
       cameraGroup.position.x +=
         (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
       cameraGroup.position.y +=
         (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
-  
-      sectionMeshes.forEach(mesh => {
-        // Rotate mesh on hover
-        if (mesh.userData.hovered) {
-          mesh.rotation.x += deltaTime * 0.3; // Adjust rotation speed as needed
+
+      sectionMeshes.forEach(group => {
+        // Rotate group on hover
+        if (group.userData.hovered) {
+          group.rotation.x += deltaTime * 0.3; // Adjust rotation speed as needed
         } else {
           // Reset rotation if not hovered
-          mesh.rotation.x += (mesh.userData.defaultRotation.x - mesh.rotation.x) * 0.05;
+          group.rotation.x += (group.userData.defaultRotation.x - group.rotation.x) * 0.05;
         }
-        mesh.rotation.y += deltaTime * 0.12;
+        group.rotation.y += deltaTime * 0.12;
       });
-  
+
+      // Animate ring particles
+      const ringParticlesPositions = ringParticlesGeometry.attributes.position.array;
+      const lerpFactor = 0.05; // Adjusted to create a smoother transition
+
+      ringAngle += deltaTime * 0.5; // Adjust this value to control rotation speed
+
+      for (let i = 0; i < ringParticlesCount; i++) {
+        if (ringParticlesIndices.has(i)) {
+          const angle = ringAngle + (i / ringParticlesCount) * Math.PI * 2;
+          const radius = 1.5;
+          ringParticlesPositions[i * 3 + 0] += (ringParticlesTargetPositions[i * 3 + 0] + radius * Math.cos(angle) - ringParticlesPositions[i * 3 + 0]) * lerpFactor;
+          ringParticlesPositions[i * 3 + 1] += (ringParticlesTargetPositions[i * 3 + 1] + radius * Math.sin(angle) - ringParticlesPositions[i * 3 + 1]) * lerpFactor;
+          ringParticlesPositions[i * 3 + 2] += (ringParticlesTargetPositions[i * 3 + 2] - ringParticlesPositions[i * 3 + 2]) * lerpFactor;
+        } else {
+          ringParticlesPositions[i * 3 + 0] += (ringParticlesOriginalPositions[i * 3 + 0] - ringParticlesPositions[i * 3 + 0]) * lerpFactor;
+          ringParticlesPositions[i * 3 + 1] += (ringParticlesOriginalPositions[i * 3 + 1] - ringParticlesPositions[i * 3 + 1]) * lerpFactor;
+          ringParticlesPositions[i * 3 + 2] += (ringParticlesOriginalPositions[i * 3 + 2] - ringParticlesPositions[i * 3 + 2]) * lerpFactor;
+        }
+      }
+
+      ringParticlesGeometry.attributes.position.needsUpdate = true;
+
       renderer.render(scene, camera);
-  
+
       window.requestAnimationFrame(tick);
     };
-  
+
     tick();
   </script>
 </body>

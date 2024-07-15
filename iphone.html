@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +53,8 @@
     .button-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px; /* Adjust spacing between paragraph and buttons */
+      margin-bottom: 20px;
+      /* Adjust spacing between paragraph and buttons */
     }
 
     .btn {
@@ -111,8 +113,9 @@
   <div class="content">
     <h1>IPhone 14 Pro Max</h1>
     <p>Experience innovation at your fingertips with the iPhone.</p>
-  <div class="button-container">
-      <button class="btn">Add to Cart</button>
+    <div class="button-container">
+      <!-- Use HTMX attributes for dynamic updates -->
+      <button class="btn" id="addToCartBtn">Add to Cart</button>
       <button class="btn">Buy Now</button>
       <button class="btn">Learn More</button>
     </div>
@@ -120,9 +123,32 @@
   </div>
 
   <script type="module">
-    import * as THREE from "three";
-    import { GLTFLoader } from "GLTFLoader";
-    import { OrbitControls } from "OrbitControls";
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+      const item = { name: 'IPhone', price: 999, image: 'phone.png' };
+      addToCart(item);
+    });
+
+    function addToCart(item) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      console.log(cart);
+      // Check if item already exists in cart based on some identifier (e.g., name or ID)
+      const existingItem = cart.find(i => i.name === item.name);
+
+      if (existingItem) {
+        existingItem.quantity++; // Increment quantity if item exists
+      } else {
+        item.quantity = 1; // Set quantity to 1 for new item
+        cart.push(item); // Add new item to cart
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // Optionally update UI or provide feedback to user
+      alert('Item added to cart:', item);
+    }
+    import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+    import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
+    import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 
     const parameters = {
       particleColor: "#ffeded"
@@ -248,4 +274,5 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   </script>
 </body>
+
 </html>

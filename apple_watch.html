@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +53,7 @@
     .button-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px; /* Adjust spacing between paragraph and buttons */
+      margin-bottom: 20px;
     }
 
     .btn {
@@ -112,7 +113,7 @@
     <h1>Apple Watch</h1>
     <p>Explore the latest Apple Watch Series with advanced health tracking and fitness features.</p>
     <div class="button-container">
-      <button class="btn">Add to Cart</button>
+      <button class="btn" id="addToCartBtn">Add to Cart</button>
       <button class="btn">Buy Now</button>
       <button class="btn">Learn More</button>
     </div>
@@ -120,6 +121,28 @@
   </div>
 
   <script type="module">
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+      const item = { name: 'Apple Watch', price: 99, image: 'phone.png' };
+      addToCart(item);
+    });
+
+    function addToCart(item) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      console.log(cart);
+      // Check if item already exists in cart based on some identifier (e.g., name or ID)
+      const existingItem = cart.find(i => i.name === item.name);
+
+      if (existingItem) {
+        existingItem.quantity++; // Increment quantity if item exists
+      } else {
+        item.quantity = 1; // Set quantity to 1 for new item
+        cart.push(item); // Add new item to cart
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Item added to cart:', item);
+    }
+
     import * as THREE from "three";
     import { GLTFLoader } from "GLTFLoader";
     import { OrbitControls } from "OrbitControls";
@@ -248,4 +271,5 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   </script>
 </body>
+
 </html>

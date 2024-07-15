@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "neue-haas-grotesk-display", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      color: #ffeded;
+      background: #1e1a20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .cart-items {
+      margin-bottom: 20px;
+    }
+
+    .item {
+      background: #29252b;
+      border: 2px solid #ffeded;
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 80%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+    }
+
+    .item img {
+      width: 80px;
+      height: auto;
+      margin-right: 10px;
+    }
+
+    .item p {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    .item-controls {
+      margin-left: auto;
+    }
+
+    .item-controls button {
+      background-color: #ffeded;
+      color: #1e1a20;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .item-controls button:hover {
+      background-color: #1e1a20;
+      color: #ffeded;
+    }
+
+    .total {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+
+    .back-link {
+      color: #ffeded;
+      text-decoration: none;
+      font-size: 1.2em;
+      border: 2px solid #ffeded;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s;
+      margin-top: 20px;
+    }
+
+    .back-link:hover {
+      background: #ffeded;
+      color: #1e1a20;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cart-items" id="cart-items">
+    <!-- Cart items will be dynamically added here -->
+  </div>
+  <div class="total" id="total">
+    Total: $0.00
+  </div>
+  <a href="index.html" class="back-link">Back to Home</a>
+  <script>
+    const cartItemsContainer = document.getElementById("cart-items");
+    const totalElement = document.getElementById("total");
+
+    function renderCartItems() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = 0;
+
+      cartItemsContainer.innerHTML = "";
+
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+
+        const itemElement = document.createElement("div");
+        itemElement.classList.add("item");
+        itemElement.innerHTML = `
+          <img src="images/${item.image}" alt="${item.name}">
+          <p>${item.name} - $${item.price.toFixed(2)} x ${item.quantity}</p>
+          <div class="item-controls">
+            <button onclick="decrementQuantity('${item.name}')">-</button>
+            <button onclick="incrementQuantity('${item.name}')">+</button>
+            <button onclick="removeItem('${item.name}')">Remove</button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+      });
+
+      totalElement.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function decrementQuantity(name) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const item = cart.find(i => i.name === name);
+
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCartItems();
+      }
+    }
+
+    function incrementQuantity(name) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const item = cart.find(i => i.name === name);
+
+      if (item) {
+        item.quantity++;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCartItems();
+      }
+    }
+
+    function removeItem(name) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const updatedCart = cart.filter(item => item.name !== name);
+
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      renderCartItems();
+    }
+
+    renderCartItems();
+  </script>
+</body>
+
+</html>
