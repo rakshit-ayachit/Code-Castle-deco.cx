@@ -1,5 +1,24 @@
 # Project Name
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Prerequisites](#prerequisites)
+4. [Getting Started](#getting-started)
+    - [Running the Application](#running-the-application)
+    - [Access the Deployed Application](#access-the-deployed-application)
+5. [Usage](#usage)
+6. [Model Details](#model-details)
+7. [Performance Metrics](#performance-metrics)
+8. [Contributing](#contributing)
+9. [Contributors and Contact](#contributors-and-contact)
+10. [Project Status](#project-status)
+11. [License](#license)
+12. [Changelog](#changelog)
+13. [Issues and Bug Reporting](#issues-and-bug-reporting)
+14. [Acknowledgements](#acknowledgements)
+
 ## Introduction
 
 A visually stunning Three.js portfolio website showcasing Apple products with parallax effects and interactive 3D models.
@@ -46,9 +65,12 @@ Contributions are welcome! Please fork the repository and submit pull requests.
 
 ## Contributors and Contact
 
-- [Your Name](link-to-your-profile) - Developer
-- [Team Member 1](link-to-profile) - Designer
-- [Team Member 2](link-to-profile) - Animator
+- [Rakshit Ayachit](https://github.com/rakshit-ayachit) - Developer
+- [Anuj Sharma](https://discord.com/users/anuj96#3622) - Designer
+- [Aakarsh Verma](https://discord.com/users/aakarshverma01) - Animator
+- [Elisa Lazar](https://discord.com/users/elisalazar#4686) - Developer
+
+Feel free to reach out to any of us for more information or collaboration opportunities.
 
 For questions or feedback, contact [rakshit.ayachit@gmail.com](mailto:rakshit.ayachit@gmail.com).
 
