@@ -1,4 +1,4 @@
-# Project Name
+# Apple Landing Page using Three.js
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@
 
 ## Introduction
 
-A visually stunning Three.js portfolio website showcasing Apple products with parallax effects and interactive 3D models.
+This was our submission to the Deco.cx Hackathon 5, where we achieved a top 9 position in our category of landing pages. A visually stunning Three.js portfolio website showcasing Apple products with parallax effects and interactive 3D models.
 
 ## Features
 
