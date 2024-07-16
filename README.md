@@ -80,15 +80,7 @@ Active development. Version 1.0 released on 2024-07-15.
 
 ## License
 
-This project is licensed under the [MIT License](link-to-license).
-
-## Changelog
-
-Detailed changes for each version.
-
-## Issues and Bug Reporting
-
-Report issues [here](link-to-issue-tracker).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
 ## Acknowledgements
 
@@ -98,7 +90,6 @@ We would like to express our gratitude to the following:
 - **Mentors and Supporters**: For their guidance, feedback, and encouragement throughout the hackathon.
 - **Community and Participants**: For fostering a collaborative and inspiring environment.
 - **Open-Source Contributors**: Whose work we built upon to create our project.
-- **Friends and Family**: For their unwavering support and motivation.
 
 Thank you to everyone who made this project and experience possible!
 
